@@ -1,0 +1,122 @@
+USE [master]
+GO
+/****** Object:  Database [RegistrationInfoDB]    Script Date: 4/16/2022 4:28:23 PM ******/
+CREATE DATABASE [RegistrationInfoDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'RegistrationInfoDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER2\MSSQL\DATA\RegistrationInfoDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'RegistrationInfoDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER2\MSSQL\DATA\RegistrationInfoDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [RegistrationInfoDB] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [RegistrationInfoDB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [RegistrationInfoDB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET RECOVERY FULL 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET  MULTI_USER 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [RegistrationInfoDB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [RegistrationInfoDB] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'RegistrationInfoDB', N'ON'
+GO
+ALTER DATABASE [RegistrationInfoDB] SET QUERY_STORE = OFF
+GO
+USE [RegistrationInfoDB]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 4/16/2022 4:28:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [nvarchar](50) NOT NULL,
+	[PasswordHash] [bigint] NOT NULL,
+ CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  StoredProcedure [dbo].[GetUser_SP]    Script Date: 4/16/2022 4:28:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[GetUser_SP] @UserName nvarchar(50), @PasswordHash bigint
+as
+select * from Users where UserName = @UserName and PasswordHash = @PasswordHash
+GO
+/****** Object:  StoredProcedure [dbo].[InsertUser_SP]    Script Date: 4/16/2022 4:28:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create procedure [dbo].[InsertUser_SP] @UserName nvarchar(50), @PasswordHash bigint
+as
+	insert into Users (UserName,PasswordHash)
+	values(@UserName,@PasswordHash)
+GO
+USE [master]
+GO
+ALTER DATABASE [RegistrationInfoDB] SET  READ_WRITE 
+GO
